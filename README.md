@@ -1,6 +1,10 @@
 infakt-api
 ============
 
+**DISCLAIMER:** This library is not properly tested (neither is it well documented), use at own risk!
+
+---
+
 This is a PHP 5.3+ API wrapper for the [InFakt API](http://infakt.pl/)
 
 * Author: Jan Kondratowicz
