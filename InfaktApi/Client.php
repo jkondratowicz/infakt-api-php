@@ -29,7 +29,7 @@ class Client {
         $this->consumer = new OAuth\Consumer($consumer_key, $consumer_secret);
     }
 
-    public function oAuthRequest($url, $method, $parameters) {
+    public function oAuthRequest($url, $method, $parameters, $postdata = "") {
         if (strrpos($url, 'https://') !== 0 && strrpos($url, 'http://') !== 0) {
             $url = "{$this->apiUrl}{$url}.{$this->format}";
         }
@@ -40,6 +40,8 @@ class Client {
         switch ($method) {
             case 'GET':
                 return $this->http($request->to_url(), 'GET');
+            case 'POST':
+                return $this->http($request->to_url(), 'POST', $postdata);
             default:
                 return $this->http($request->get_normalized_http_url(), $method, $request->to_postdata());
         }
@@ -89,13 +91,12 @@ class Client {
         $this->http_info = array_merge($this->http_info, curl_getinfo($ci));
         $this->url = $url;
         curl_close($ci);
-
         $httpcode = intval($this->http_code);
         if ($httpcode !== 200) {
             if ($httpcode === 401) {
                 throw new Exception\UnauthorizedException();
             } else {
-                throw new Exception\BadRequestException();
+                throw new Exception\BadRequestException($response);
             }
         }
 
@@ -124,7 +125,10 @@ class Client {
      * POST wrapper for oAuthRequest.
      */
     public function post($url, $parameters = array()) {
-        $response = $this->oAuthRequest($url, 'POST', $parameters);
+        if ($this->format === 'json') {
+            $parameters = json_encode($parameters);
+        }
+        $response = $this->oAuthRequest($url, 'POST', array(), $parameters);
         if ($this->format === 'json' && $this->decode_json) {
             return json_decode($response);
         }
