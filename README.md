@@ -36,15 +36,11 @@ $response = $client->get($action, array $params);
 ```
 <?php
 
-$clientId = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
-$clientSecret = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
-$username = 'example@email.com';
-$password = 'SECRET';
+$apiKey = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 
 try {
-    $client = new InfaktApi\Client($clientId, $clientSecret);
-    $client->authorize($username, $password);
-    $response = $client->get('settings/user_data');
+    $client = new InfaktApi\Client($apiKey);
+    $response = $client->get('invoices');
     $parsed = json_decode($response);
     var_dump($parsed);
 } catch (InfaktApi\Exception\UnauthorizedException $e) {
