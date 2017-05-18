@@ -74,7 +74,7 @@ class Client {
         }
 
         curl_setopt($ci, CURLOPT_URL, $url);
-        curl_setopt($ci, CURLOPT_VERBOSE, true);
+        // curl_setopt($ci, CURLOPT_VERBOSE, true);
         $response = curl_exec($ci);
         $this->http_code = curl_getinfo($ci, CURLINFO_HTTP_CODE);
         $this->http_info = array_merge($this->http_info, curl_getinfo($ci));
